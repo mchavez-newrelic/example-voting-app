@@ -60,54 +60,62 @@ kubectl delete -f k8s-specifications/
 ### Account Setup
 - You'll need a New Relic account. The good news is that you can create a free account [here](https://newrelic.com/signup) (no credit card required).
 ### Python Agent Installation
-* Once you've created an account, you can begin installing the agent by first clicking the `Add Data` tab on the left hand navigation pane, as shown below. <img width="1490" alt="Screenshot 2023-06-05 at 2 36 30 PM" src="https://github.com/mchavez-newrelic/relicstaurants/assets/132291725/5fccb01f-e9c4-4877-b977-7df2ff5c2553">
-* Search for the Python agent in the `Search for any technology` search bar and click the Python agent under the `Application monitoring` section as shown below. <img width="824" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/6f3085b5-0778-4e4c-a5e9-55d61ae48afb">
-* Next, give your application a name
-* Install the New Relic agent into the voting app Docker container by following the below steps
-  * Add the `newrelic` Python module as a dependency in the `/vote/requirements.txt` file
-  * Copy the `newrelic.ini` file as shown below into the `/vote` directory of the project folder. <img width="1245" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/8f2c5ad0-348b-466e-9d9c-a5409b5c08b2">
-  * Add the `NEW_RELIC_CONFIG_FILE` as an environment variable in the `docker-compose.yml` file to point to the `newrelic.ini` file. 
-  * Add the `newrelic-admin run-program` commands in front of the existing `python app.py` command for the vote Docker service.
-  * Your `vote` service in your `docker-compose.yml` file should look like the following:
-```
-services:
-  vote:
-    build: ./vote
-    # use python rather than gunicorn for local dev
-    command: newrelic-admin run-program python app.py
-    environment:
-      - NEW_RELIC_CONFIG_FILE=/app/newrelic.ini
-    depends_on:
-      redis:
-        condition: service_healthy
-    healthcheck: 
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    volumes:
-     - ./vote:/app
-    ports:
-      - "5000:80"
-    networks:
-      - front-tier
-      - back-tier
-```
-* Next, connect your infrastructure by running the given Docker command as shown below. <img width="1259" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/a769e827-056e-4518-b74c-13907e4a9d0b">
-* Run your application with `docker compose up` in the project directory
-* Finally, test the connection to the Python agent and your infrastructure. You should see results similar to the screenshot below. It is ok for the `On-host logs` connection to fail. ![image](https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/053d87b0-81e4-4dd7-8421-1ec2443ef65c)
+<details>
+  <summary markdown='span' style="background-color: #1DE783; color: black; padding: 10px;">Steps for Python Agent Installation</summary>
+ 1. You can begin installing the Python agent by first clicking the <b>Add Data</b> tab on the left hand navigation pane, as shown below. <br/><img width="1490" alt="Screenshot 2023-06-05 at 2 36 30 PM" src="https://github.com/mchavez-newrelic/relicstaurants/assets/132291725/5fccb01f-e9c4-4877-b977-7df2ff5c2553">
+ 2. Search for the Python agent in the <b>Search for any technology</b> search bar and click the Python agent under the <b>Application monitoring</b> section as shown below. <br/><img width="824" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/6f3085b5-0778-4e4c-a5e9-55d61ae48afb"><br/>
+3. Next, give your application a name.<br/>
+4. Install the New Relic agent into the voting app Docker container by following the below steps:
+<ul>
+ <li>Add the <code>newrelic</code> Python module as a dependency in the <code>/vote/requirements.txt</code> file</li>
+ <li>Copy the <code>newrelic.ini</code> file as shown below into the <code>/vote</code> directory of the project folder. <br/><img width="1245" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/8f2c5ad0-348b-466e-9d9c-a5409b5c08b2"></li>
+ <li>Add the <code>NEW_RELIC_CONFIG_FILE</code> as an environment variable in the <code>docker-compose.yml</code> file to point to the <code>newrelic.ini</code> file.</li>
+ <li>Add the <code>newrelic-admin run-program</code> commands in front of the existing <code>python app.py</code> command for the vote Docker service.</li>
+ <li>Your <code>vote</code> service in your <code>docker-compose.yml</code> file should look like the code <a href="https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/docker-compose.yml#LL6C4-L6C4">here</a>.</li>
+ </ul>
+5. Next, connect your infrastructure by running the given Docker command as shown below. <img width="1259" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/a769e827-056e-4518-b74c-13907e4a9d0b">
+6. Run your application with <code>docker compose up</code> in the project directory
+7. Finally, test the connection to the Python agent and your infrastructure. You should see results similar to the screenshot below. It is ok for the <b>On-host logs</b> connection to fail. <img width="1259" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/b2a9f949-a276-4f2a-bfdc-0cf2fdc10c93">
+</details>
 
 ### Troubleshooting Python Agent Installation
-* If the connection to the Python agent fails in the last step. 
-  * First tear down your Docker containers with `docker compose down`
-  * Try running the following command to forcefully rebuild your images: `docker compose build --no-cache`
-  * Then try running `docker compose up` again to start your containers
-* If the connection to the Infrastructure agent fails in the last step.
-  * Try running the Linux install command instead of the Docker command as shown below. <img width="1255" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/438cb11f-fe7f-45be-b192-93fd7c512839">
+<details>
+  <summary style="background-color: #1DE783; color: black; padding: 10px;">Troubleshooting Python Agent Installation</summary>
+1. If the connection to the Python agent fails in the last step. 
+ <ul>
+  <li>First tear down your Docker containers with <code>docker compose down</code></li>
+  <li>Try running the following command to forcefully rebuild your images: <code>docker compose build --no-cache</code></li>
+  </li>Then try running <code>docker compose up</code> again to start your containers</li>
+ </ul>
+2. If the connection to the Infrastructure agent fails in the last step, try running the Linux install command instead of the Docker command as shown below.<br/><img width="1255" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/438cb11f-fe7f-45be-b192-93fd7c512839">
+</details>
 
+### .NET Agent Installation
+<details>
+  <summary style="background-color: #1DE783; color: black; padding: 10px;">Steps for .NET Agent</summary>
+ 1. You can begin installing the .NET agent by first clicking the <b>Add Data</b> tab on the left hand navigation pane, as shown below. <br/><img width="1490" alt="Screenshot 2023-06-05 at 2 36 30 PM" src="https://github.com/mchavez-newrelic/relicstaurants/assets/132291725/5fccb01f-e9c4-4877-b977-7df2ff5c2553">
+ 2. Search for the .NET agent in the <b>Search for any technology</b> search bar and click the Python agent under the <b>Application monitoring</b> section as shown below. <br/><img width="824" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/6f3085b5-0778-4e4c-a5e9-55d61ae48afb"><br/>
+3. Next, give your application a name, preferably different from the name given to your Python Agent. For example, you can name the .NET application <code>example-voting-app-worker</code> in your New Relic account.
+ 4. We will be following the steps linked <a href="https://docs.newrelic.com/install/dotnet/?deployment=linux&docker=yesDocker">here</a> to install and enable the .NET agent inside our .NET Docker container.
+<ul>
+  <li>Replace the code in your <code>/worker/Dockerfile</code> file for your .NET worker to be as shown <a href="https://github.com/mchavez-newrelic/example-voting-app/blob/instrumented-version/worker/Dockerfile">here</a>.</li>
+  <li>Make sure to replace <code>YOUR_LICENSE_KEY</code> and <code>YOUR_APP_NAME</code> with your New Relic license key and .NET application name respectively inside the <code>ENV</code> command at the bottom of the Dockerfile. If you would like to know where to find your license key, you can follow instructions <a href="https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/">here</a>.</li>
+ </ul>
+</details>
 
+ ### .NET Worker Custom Instrumentation
+ <details>
+  <summary style="background-color: #1DE783; color: black; padding: 10px;">Adding Custom Instrumentation</summary>
+  1. If you have installed the .NET agent inside the .NET worker Dockerfile, we can begin adding custom instrumentation to monitor the .NET worker's transactions. 
+ <ul>
+  <li>Let's first make sure we install the <code>NewRelic.Agent.Api</code> package in our project's PackageReference.</li>
+  <li>Replace your <code>/worker/Worker.csproj</code> file with the code <a href="https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/worker/Worker.csproj#LL12C6-L12C6">here</a> so we can install the <code>NewRelic.Agent.Api</code> package.</li>
+ </ul>
+ 2. Let's begin with a simple task of tracking the <code>UpdateVote</code> transaction inside the <code>/worker/Program.cs</code> file for the .NET worker.
+ </details>
+ 
 
+ 
 
 
 ## Notes
