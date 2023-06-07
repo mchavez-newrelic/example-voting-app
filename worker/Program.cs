@@ -7,6 +7,7 @@ using System.Threading;
 using Newtonsoft.Json;
 using Npgsql;
 using StackExchange.Redis;
+using NewRelic.Api.Agent;
 
 namespace Worker
 {
@@ -130,6 +131,7 @@ namespace Worker
                 .First(a => a.AddressFamily == AddressFamily.InterNetwork)
                 .ToString();
 
+        [Transaction]
         private static void UpdateVote(NpgsqlConnection connection, string voterId, string vote)
         {
             var command = connection.CreateCommand();

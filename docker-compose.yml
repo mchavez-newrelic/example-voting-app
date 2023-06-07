@@ -6,7 +6,9 @@ services:
   vote:
     build: ./vote
     # use python rather than gunicorn for local dev
-    command: python app.py
+    command: newrelic-admin run-program python app.py
+    environment:
+      - NEW_RELIC_CONFIG_FILE=/app/newrelic.ini
     depends_on:
       redis:
         condition: service_healthy
