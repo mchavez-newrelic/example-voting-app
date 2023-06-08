@@ -111,6 +111,13 @@ kubectl delete -f k8s-specifications/
   * Let's first make sure we install the `NewRelic.Agent.Api` package in our project's PackageReference.
   * Replace your /worker/Worker.csproj file with the code [here](https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/worker/Worker.csproj#LL12C6-L12C6) so we can install the `NewRelic.Agent.Api` package.
 * Let's begin with a simple task of tracking the `UpdateVote` transaction inside the `/worker/Program.cs` file for the .NET worker.
+  * Place the following line at the top of your `Program.cs` file: `using NewRelic.Api.Agent;` as shown [here](https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/worker/Program.cs#L10).
+  * Place a `[Transaction]` decorator directly above the `UpdateVote` function as shown [here](https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/worker/Program.cs#L134).
+  * The above steps will import the `NewRelic.Api.Agent` package into our worker's code and will create a custom transaction that can be tracked in New Relic whenever the `UpdateVote` function is called.
+* Try interacting with the app so the worker can process some votes and so we can begin seeing data in our New Relic account! 
+  * Navigate to `APM & Services` on the left hand navigation pane and click the application name given to your .NET worker. Click the `Transactions` section on the navigation pane.<img width="644" alt="APM Services_Transactions" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/15ec7ba3-424d-4645-a759-de1ea624b95d">
+  * You should begin to see data showing up in New Relic as shown below: <img width="1309" alt="Screenshot 2023-06-07 at 3 19 17 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/e982a82f-d217-4244-9aa0-43dfa8fe5e8b">
+
 </details>
 
 ## Building a Dashboard
