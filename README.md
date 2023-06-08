@@ -50,6 +50,7 @@ docker stack deploy --compose-file docker-stack.yml vote
 <details>
  <summary>Python Agent Installation</summary>
  
+<<<<<<< Updated upstream
 * Once you've created an account, you can begin installing the agent by first clicking the `Add Data` tab on the left hand navigation pane, as shown below. <img width="1490" alt="Add Data" src="readmeData/AgentInstallation_1.png">
 * Search for the Python agent in the `Search for any technology` search bar and click the Python agent under the `Application monitoring` section as shown below. <img width="824" alt="Search Python Agent" src="readmeData/PythonAgentInstallation_2.png">
 * Next, give your application a name
@@ -60,6 +61,18 @@ docker stack deploy --compose-file docker-stack.yml vote
   * Add the `newrelic-admin run-program` commands in front of the existing `python app.py` command for the vote Docker service.
   * Your `vote` service in your `docker-compose.yml` file should look like the code [here](https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/docker-compose.yml#L6):
 * Next, connect your infrastructure by running the given Docker command as shown below. <img width="971" alt="Connect your logs and infrastructure - Docker" src="readmeData/PythonAgentInstallation_4.png">
+=======
+* Once you've created an account, you can begin installing the agent by first clicking the `Add Data` tab on the left hand navigation pane, as shown below. <img src="readmeData/python_agent_installation_1.png" alt="image" width="60%" height="60%>
+* Search for the Python agent in the `Search for any technology` search bar and click the Python agent under the `Application monitoring` section as shown below. <img src="readmeData/python_agent_installation_2.png" alt="image" width="60%" height="60%>
+* Next, give your application a name
+* Install the New Relic agent into the voting app Docker container by following the below steps
+  * Add the `newrelic` Python module as a dependency in the `/vote/requirements.txt` file
+  * Copy the `newrelic.ini` file as shown below into the `/vote` directory of the project folder. <img src="readmeData/python_agent_installation_3.png" alt="image" width="60%" height="60%>
+  * Add the `NEW_RELIC_CONFIG_FILE` as an environment variable in the `docker-compose.yml` file to point to the `newrelic.ini` file. 
+  * Add the `newrelic-admin run-program` commands in front of the existing `python app.py` command for the vote Docker service.
+  * Your `vote` service in your `docker-compose.yml` file should look like the code [here](https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/docker-compose.yml#L6):
+* Next, connect your infrastructure by running the given Docker command as shown below. <img src="readmeData/python_agent_installation_4.png" alt="image" width="60%" height="60%>
+>>>>>>> Stashed changes
 * Run your application with `docker compose up` in the project directory
 * Finally, test the connection to the Python agent and your infrastructure. You should see results similar to the screenshot below. It is ok for the `On-host logs` connection to fail. <img width="971" alt="Test the connection" src="readmeData/PythonAgentInstallation_5.png">
 </details>
@@ -72,7 +85,11 @@ docker stack deploy --compose-file docker-stack.yml vote
   * Try running the following command to forcefully rebuild your images: `docker compose build --no-cache`
   * Then try running `docker compose up` again to start your containers
 * If the connection to the Infrastructure agent fails in the last step.
+<<<<<<< Updated upstream
   * Try running the Linux install command instead of the Docker command as shown below. <img width="962" alt="Connect your logs and infrastructure - Linux" src="readmeData/TroubleshootingPythonAgentInstallation.png">
+=======
+  * Try running the Linux install command instead of the Docker command as shown below. <img src="readmeData/troubleshooting_python_agent_installation_1.png" alt="image" width="60%" height="60%>
+>>>>>>> Stashed changes
 </details>
 
 ### .NET Agent
@@ -108,24 +125,63 @@ docker stack deploy --compose-file docker-stack.yml vote
 
 </details>
 
+### NodeJS Agent
+<details>
+  <summary>NodeJS Agent Installation
+  
+* Once you've created an account, you can begin installing the agent by first clicking the `Add Data` tab on the left hand navigation pane, as shown below. <img src="readmeData/nodeJS_agent_installation_1.png" alt="image" width="60%" height="60%">
+* For Instrumentation Method, select `Docker` <img src="readmeData/nodeJS_agent_installation_2.png" alt="image" width="60%" height="60%">
+* Give your application a name and click Save.
+* Look for the `package.json` file in the `result` folder and add `"newrelic": "latest"` as part of the dependencies <img src="readmeData/nodeJS_agent_installation_3.png" alt="image" width="60%" height="60%">
+* In the `server.js` file, add this line to the top: `newrelic = require('newrelic');` <img src="readmeData/nodeJS_agent_installation_4.png" alt="image" width="60%" height="60%">
+* Setting up your ENV variables
+  * For the Dockerfile in the `result` folder, we will need to add this ENV variable `ENV NEW_RELIC_NO_CONFIG_FILE=true` <img src="readmeData/nodeJS_agent_installation_4.png" alt="image" width="60%" height="60%">
+  * Since we do not have a newrelic.js file, we will need to setup the ENV variables for our license key and app name. In the same dockerfile, add `ENV NEW_RELIC_APP_NAME=[Insert Different App Name]` and `ENV NEW_RELIC_LICENSE_KEY=[Insert Ingest License Key]`. Make sure to use a unique application name that doesn't exist in New Relic One.
+  * Optionally, you can also add other ENV variables like `ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true \` and `NEW_RELIC_LOG=stdout`. Please refer to [here](https://docs.newrelic.com/docs/apm/agents/nodejs-agent/installation-configuration/nodejs-agent-configuration). <img src="readmeData/nodeJS_agent_installation_6.png" alt="image" width="60%" height="60%">
+* In your terminal, run this following command to build your Docker containers: `docker compose build --no-cache`
+  * Afterwards, we can run the Docker images by executing `docker compose up`
+* Continue to the next step in New Relic One to test for a successful connection <img src="readmeData/nodeJS_agent_installation_6.png" alt="image" width="60%" height="60%">
+
+</details>
+
 ## Building a Dashboard
 <details>
  <summary>Instructions</summary>
  
- * In your New Relic One dashboard on the left, click on `Dashboards`, then on the top right, click on `Create a dashboard`
- <img width="1512" alt="Screenshot 2023-06-07 at 3 34 54 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/d4551df2-6b7d-40d6-b912-245285457dae">
- 
- * Select `Create a new dashboard` and on the next page, enter a name before proceeding.
- <img width="406" alt="Screenshot 2023-06-07 at 3 35 20 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/c993b574-8c51-4bf3-b465-a566774a210a"> <img width="404" alt="Screenshot 2023-06-07 at 3 36 12 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/1c31b155-1f3d-41f2-b845-c2b1653045de">
+* We will need to send some custom events in order to create a custom dashboard
+  * In `vote/app.py` add these 2 lines at the top
+  ```
+  import newrelic.agent
+  newrelic.agent.initialize('/app/newrelic.ini')
+  ```
+  * After line 39, we will add this block of code to customize an event and to send it to New Relic
+  ```
+  cats = 0
+  dogs = 0
+  params = None
+  if vote == 'a':
+      params = {'cats': 1}
+  if vote == 'b':
+      params = {'dogs': 1}
+  newrelic.agent.record_custom_event('votes', params,application=newrelic.agent.application())
+  ```
+  <img src="readmeData/building_a_dashboard_1.png" alt="image" width="60%" height="60%">
+  * Run your app and the custom events data should flow into New Relic One
 
- * Click on any panel to `Add a new chart` and in the pop-up on the right, select `Add a chart`
- <img width="434" alt="Screenshot 2023-06-07 at 2 46 41 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/5fb9e67b-eb62-4a16-90e0-1bbd65effbc1"> <img width="396" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/02ddff53-02fd-4390-80bd-1948287eca42">
+* In your New Relic One dashboard on the left, click on `Dashboards`, then on the top right, click on `Create a dashboard`
+ <img src="readmeData/building_a_dashboard_2.png" alt="image" width="60%" height="60%">
  
- * Enter the follow query `SELECT count(*) FROM votes FACET appName TIMESERIES SINCE 5 hours ago` and hit the `Run` button. You should be able to see a chart of the results being sent from the application. You can also customize how the chart looks, for example, we can change the "Chart Type"
- <img width="1360" alt="Screenshot 2023-06-07 at 2 47 51 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/c78e8c35-fe48-4c7c-80d1-55d6e286102a">
+* Select `Create a new dashboard` and on the next page, enter a name before proceeding.
+ <img width="406" alt="image" src="readmeData/building_a_dashboard_3.png"> <img width="404" alt="image" src="readmeData/building_a_dashboard_4.png">
+
+* Click on any panel to `Add a new chart` and in the pop-up on the right, select `Add a chart`
+ <img width="434" alt="image" src="readmeData/building_a_dashboard_5.png"> <img width="396" alt="image" src="readmeData/building_a_dashboard_6.png">
  
- * Changing the "Chart Type" to Stacked Bar will look like this:
-<img width="1361" alt="Screenshot 2023-06-07 at 2 47 33 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/96b8f6a1-298e-47e1-837c-57127eecd212">
+* Enter the follow query `SELECT count(*) FROM votes FACET appName TIMESERIES SINCE 5 hours ago` and hit the `Run` button. You should be able to see a chart of the results being sent from the application. You can also customize how the chart looks, for example, we can change the "Chart Type"
+ <img src="readmeData/building_a_dashboard_2.png" alt="image" width="60%" height="60%">
+ 
+* Changing the "Chart Type" to Stacked Bar will look like this: 
+ <img src="readmeData/building_a_dashboard_2.png" alt="image" width="60%" height="60%">
 </details> 
 
 ## Run the app in Kubernetes
