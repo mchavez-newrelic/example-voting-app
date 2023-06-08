@@ -117,6 +117,11 @@ kubectl delete -f k8s-specifications/
 * Try interacting with the app so the worker can process some votes and so we can begin seeing data in our New Relic account! 
   * Navigate to `APM & Services` on the left hand navigation pane and click the application name given to your .NET worker. Click the `Transactions` section on the navigation pane.<img width="644" alt="APM Services_Transactions" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/15ec7ba3-424d-4645-a759-de1ea624b95d">
   * You should begin to see data showing up in New Relic as shown below: <img width="1309" alt="Screenshot 2023-06-07 at 3 19 17 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/e982a82f-d217-4244-9aa0-43dfa8fe5e8b">
+* As of now, we've only added custom instrumentation for tracking the `UpdateVote` transaction. Let's try adding custom instrumentation for tracking our query to the Redis server!
+  * To do this, we'll need to extract our call to the Redis server into its own function rather than being called directly in the `Main` function. 
+  * Try poking around in the main function in `/worker/Program.cs` to see if you can find the call being made to Redis. Then, try extracting this call into its own function and decorating it with a `[Transaction]`. You should have a final result that looks like [this](https://github.com/mchavez-newrelic/example-voting-app/blob/cef8d9cffadc0761b585f0c65f87ea6fc887a037/worker/Program.cs#L156).
+  * Let's restart our application and interact with the vote counter to make some calls to the Redis server. You should begin to see data in your New Relic account as shown below. <img width="1480" alt="APM Services_Transactions2" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/d21394e2-c254-4eaf-9250-291302c1b7e8">
+  * This is really cool as we're now adding custom instrumentation to track a couple important transactions that are being made in our .NET worker! Feel free to add more custom instrumentation as you'd like, and you can also reference documentation [here](https://docs.newrelic.com/docs/apm/agents/net-agent/custom-instrumentation/introduction-net-custom-instrumentation/) for doing so.
 
 </details>
 
