@@ -28,24 +28,6 @@ Once you have your swarm, in this directory run:
 docker stack deploy --compose-file docker-stack.yml vote
 ```
 
-## Run the app in Kubernetes
-
-The folder k8s-specifications contains the YAML specifications of the Voting App's services.
-
-Run the following command to create the deployments and services. Note it will create these resources in your current namespace (`default` if you haven't changed it.)
-
-```shell
-kubectl create -f k8s-specifications/
-```
-
-The `vote` web app is then available on port 31000 on each host of the cluster, the `result` web app is available on port 31001.
-
-To remove them, run:
-
-```shell
-kubectl delete -f k8s-specifications/
-```
-
 ## Architecture
 
 ![Architecture diagram](architecture.excalidraw.png)
@@ -144,6 +126,28 @@ kubectl delete -f k8s-specifications/
  * Changing the "Chart Type" to Stacked Bar will look like this:
 <img width="1361" alt="Screenshot 2023-06-07 at 2 47 33 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/96b8f6a1-298e-47e1-837c-57127eecd212">
 </details> 
+
+## Run the app in Kubernetes
+<details>
+ <summary>Steps</summary>
+ 
+ The folder k8s-specifications contains the YAML specifications of the Voting App's services.
+
+Run the following command to create the deployments and services. Note it will create these resources in your current namespace (`default` if you haven't changed it.)
+
+```shell
+kubectl create -f k8s-specifications/
+```
+
+The `vote` web app is then available on port 31000 on each host of the cluster, the `result` web app is available on port 31001.
+
+To remove them, run:
+
+```shell
+kubectl delete -f k8s-specifications/
+```
+</details>
+
 
 ## Notes
 
