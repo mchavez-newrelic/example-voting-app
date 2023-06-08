@@ -38,7 +38,7 @@ namespace Worker
                         redisConn = OpenRedisConnection("redis");
                         redis = redisConn.GetDatabase();
                     }
-                    string json = redis.ListLeftPopAsync("votes").Result;
+                    string json = queryRedis(redis);
                     if (json != null)
                     {
                         var vote = JsonConvert.DeserializeAnonymousType(json, definition);
@@ -151,6 +151,12 @@ namespace Worker
             {
                 command.Dispose();
             }
+        }
+
+        [Transaction]
+        private static string queryRedis(IDatabase redis)
+        {
+            return redis.ListLeftPopAsync("votes").Result;
         }
     }
 }
