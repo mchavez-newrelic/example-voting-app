@@ -39,6 +39,7 @@ docker stack deploy --compose-file docker-stack.yml vote
 * A [Node.js](/result) web app which shows the results of the voting in real time
 
 ## Instrumentation
+**Note: At any point during the below steps, feel free to look at the `instrumented-version` branch of this repo [here](https://github.com/mchavez-newrelic/example-voting-app/tree/instrumented-version) for reference.**
 <details>
  <summary>Account Setup</summary>
  
