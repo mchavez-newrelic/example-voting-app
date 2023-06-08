@@ -62,6 +62,8 @@ kubectl delete -f k8s-specifications/
  
 - You'll need a New Relic account. The good news is that you can create a free account [here](https://newrelic.com/signup) (no credit card required).
 </details>
+
+### Python Agent
 <details>
  <summary>Python Agent Installation</summary>
  
@@ -73,32 +75,7 @@ kubectl delete -f k8s-specifications/
   * Copy the `newrelic.ini` file as shown below into the `/vote` directory of the project folder. <img width="1245" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/8f2c5ad0-348b-466e-9d9c-a5409b5c08b2">
   * Add the `NEW_RELIC_CONFIG_FILE` as an environment variable in the `docker-compose.yml` file to point to the `newrelic.ini` file. 
   * Add the `newrelic-admin run-program` commands in front of the existing `python app.py` command for the vote Docker service.
-  * Your `vote` service in your `docker-compose.yml` file should look like the following:
-```
-services:
-  vote:
-    build: ./vote
-    # use python rather than gunicorn for local dev
-    command: newrelic-admin run-program python app.py
-    environment:
-      - NEW_RELIC_CONFIG_FILE=/app/newrelic.ini
-    depends_on:
-      redis:
-        condition: service_healthy
-    healthcheck: 
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    volumes:
-     - ./vote:/app
-    ports:
-      - "5000:80"
-    networks:
-      - front-tier
-      - back-tier
-```
+  * Your `vote` service in your `docker-compose.yml` file should look like the code [here](https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/docker-compose.yml#L6):
 * Next, connect your infrastructure by running the given Docker command as shown below. <img width="971" alt="Screenshot 2023-06-06 at 3 53 40 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/01259262-1d93-4238-9f45-5655d2dfd7d5">
 * Run your application with `docker compose up` in the project directory
 * Finally, test the connection to the Python agent and your infrastructure. You should see results similar to the screenshot below. It is ok for the `On-host logs` connection to fail. ![image](https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/053d87b0-81e4-4dd7-8421-1ec2443ef65c)
@@ -113,6 +90,27 @@ services:
   * Then try running `docker compose up` again to start your containers
 * If the connection to the Infrastructure agent fails in the last step.
   * Try running the Linux install command instead of the Docker command as shown below. <img width="962" alt="Screenshot 2023-06-06 at 4 05 09 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/e907fb62-2888-4bae-bef5-610b38012403">
+</details>
+
+### .NET Agent
+<details>
+  <summary>.NET Agent Installation</summary>
+ 
+* You can begin installing the .NET agent by first clicking the **Add Data** tab on the left hand navigation pane, as shown below. <img width="1490" alt="Screenshot 2023-06-05 at 2 36 30 PM" src="https://github.com/mchavez-newrelic/relicstaurants/assets/132291725/5fccb01f-e9c4-4877-b977-7df2ff5c2553">
+* Search for the .NET agent in the **Search for any technology** search bar and click the Python agent under the **Application monitoring** section as shown below. <img width="824" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/6f3085b5-0778-4e4c-a5e9-55d61ae48afb">
+* Next, give your application a name, preferably different from the name given to your Python Agent. For example, you can name the .NET application `example-voting-app-worker` in your New Relic account.
+* We will be following the steps linked [here](https://docs.newrelic.com/install/dotnet/?deployment=linux&docker=yesDocker) to install and enable the .NET agent inside our .NET Docker container.
+  * Replace the code in your `/worker/Dockerfile` file for your .NET worker to be as shown [here](https://github.com/mchavez-newrelic/example-voting-app/blob/instrumented-version/worker/Dockerfile).
+  * Make sure to replace `YOUR_LICENSE_KEY` and `YOUR_APP_NAME` with your New Relic license key and .NET application name respectively inside the `ENV` command at the bottom of the Dockerfile. If you would like to know where to find your license key, you can follow instructions [here](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/).
+</details>
+
+<details>
+  <summary>.NET Worker Custom Instrumentation</summary>
+
+* If you have installed the .NET agent inside the .NET worker Dockerfile, we can begin adding custom instrumentation to monitor the .NET worker's transactions. 
+  * Let's first make sure we install the `NewRelic.Agent.Api` package in our project's PackageReference.
+  * Replace your /worker/Worker.csproj file with the code [here](https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/worker/Worker.csproj#LL12C6-L12C6) so we can install the `NewRelic.Agent.Api` package.
+* Let's begin with a simple task of tracking the `UpdateVote` transaction inside the `/worker/Program.cs` file for the .NET worker.
 </details>
 
 ## Building a Dashboard
@@ -133,35 +131,7 @@ services:
  
  * Changing the "Chart Type" to Stacked Bar will look like this:
 <img width="1361" alt="Screenshot 2023-06-07 at 2 47 33 PM" src="https://github.com/mchavez-newrelic/example-voting-app/assets/104166698/96b8f6a1-298e-47e1-837c-57127eecd212">
-</details>
-
-### .NET Agent Installation
-<details>
-  <summary style="background-color: #1DE783; color: black; padding: 10px;">Steps for .NET Agent</summary>
- 1. You can begin installing the .NET agent by first clicking the <b>Add Data</b> tab on the left hand navigation pane, as shown below. <br/><img width="1490" alt="Screenshot 2023-06-05 at 2 36 30 PM" src="https://github.com/mchavez-newrelic/relicstaurants/assets/132291725/5fccb01f-e9c4-4877-b977-7df2ff5c2553">
- 2. Search for the .NET agent in the <b>Search for any technology</b> search bar and click the Python agent under the <b>Application monitoring</b> section as shown below. <br/><img width="824" alt="image" src="https://github.com/mchavez-newrelic/example-voting-app/assets/132291725/6f3085b5-0778-4e4c-a5e9-55d61ae48afb"><br/>
-3. Next, give your application a name, preferably different from the name given to your Python Agent. For example, you can name the .NET application <code>example-voting-app-worker</code> in your New Relic account.
- 4. We will be following the steps linked <a href="https://docs.newrelic.com/install/dotnet/?deployment=linux&docker=yesDocker">here</a> to install and enable the .NET agent inside our .NET Docker container.
-<ul>
-  <li>Replace the code in your <code>/worker/Dockerfile</code> file for your .NET worker to be as shown <a href="https://github.com/mchavez-newrelic/example-voting-app/blob/instrumented-version/worker/Dockerfile">here</a>.</li>
-  <li>Make sure to replace <code>YOUR_LICENSE_KEY</code> and <code>YOUR_APP_NAME</code> with your New Relic license key and .NET application name respectively inside the <code>ENV</code> command at the bottom of the Dockerfile. If you would like to know where to find your license key, you can follow instructions <a href="https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/">here</a>.</li>
- </ul>
-</details>
-
- ### .NET Worker Custom Instrumentation
- <details>
-  <summary style="background-color: #1DE783; color: black; padding: 10px;">Adding Custom Instrumentation</summary>
-  1. If you have installed the .NET agent inside the .NET worker Dockerfile, we can begin adding custom instrumentation to monitor the .NET worker's transactions. 
- <ul>
-  <li>Let's first make sure we install the <code>NewRelic.Agent.Api</code> package in our project's PackageReference.</li>
-  <li>Replace your <code>/worker/Worker.csproj</code> file with the code <a href="https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/worker/Worker.csproj#LL12C6-L12C6">here</a> so we can install the <code>NewRelic.Agent.Api</code> package.</li>
- </ul>
- 2. Let's begin with a simple task of tracking the <code>UpdateVote</code> transaction inside the <code>/worker/Program.cs</code> file for the .NET worker.
- </details>
- 
-
- 
-
+</details> 
 
 ## Notes
 
