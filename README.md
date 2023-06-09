@@ -50,7 +50,6 @@ docker stack deploy --compose-file docker-stack.yml vote
 <details>
  <summary>Python Agent Installation</summary>
  
-<<<<<<< Updated upstream
 * Once you've created an account, you can begin installing the agent by first clicking the `Add Data` tab on the left hand navigation pane, as shown below. <img width="1490" alt="Add Data" src="readmeData/AgentInstallation_1.png">
 * Search for the Python agent in the `Search for any technology` search bar and click the Python agent under the `Application monitoring` section as shown below. <img width="824" alt="Search Python Agent" src="readmeData/PythonAgentInstallation_2.png">
 * Next, give your application a name
@@ -61,18 +60,6 @@ docker stack deploy --compose-file docker-stack.yml vote
   * Add the `newrelic-admin run-program` commands in front of the existing `python app.py` command for the vote Docker service.
   * Your `vote` service in your `docker-compose.yml` file should look like the code [here](https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/docker-compose.yml#L6):
 * Next, connect your infrastructure by running the given Docker command as shown below. <img width="971" alt="Connect your logs and infrastructure - Docker" src="readmeData/PythonAgentInstallation_4.png">
-=======
-* Once you've created an account, you can begin installing the agent by first clicking the `Add Data` tab on the left hand navigation pane, as shown below. <img src="readmeData/python_agent_installation_1.png" alt="image" width="60%" height="60%>
-* Search for the Python agent in the `Search for any technology` search bar and click the Python agent under the `Application monitoring` section as shown below. <img src="readmeData/python_agent_installation_2.png" alt="image" width="60%" height="60%>
-* Next, give your application a name
-* Install the New Relic agent into the voting app Docker container by following the below steps
-  * Add the `newrelic` Python module as a dependency in the `/vote/requirements.txt` file
-  * Copy the `newrelic.ini` file as shown below into the `/vote` directory of the project folder. <img src="readmeData/python_agent_installation_3.png" alt="image" width="60%" height="60%>
-  * Add the `NEW_RELIC_CONFIG_FILE` as an environment variable in the `docker-compose.yml` file to point to the `newrelic.ini` file. 
-  * Add the `newrelic-admin run-program` commands in front of the existing `python app.py` command for the vote Docker service.
-  * Your `vote` service in your `docker-compose.yml` file should look like the code [here](https://github.com/mchavez-newrelic/example-voting-app/blob/418fd6dcbd60642ec2ab30932827b934711cec9f/docker-compose.yml#L6):
-* Next, connect your infrastructure by running the given Docker command as shown below. <img src="readmeData/python_agent_installation_4.png" alt="image" width="60%" height="60%>
->>>>>>> Stashed changes
 * Run your application with `docker compose up` in the project directory
 * Finally, test the connection to the Python agent and your infrastructure. You should see results similar to the screenshot below. It is ok for the `On-host logs` connection to fail. <img width="971" alt="Test the connection" src="readmeData/PythonAgentInstallation_5.png">
 </details>
@@ -85,11 +72,7 @@ docker stack deploy --compose-file docker-stack.yml vote
   * Try running the following command to forcefully rebuild your images: `docker compose build --no-cache`
   * Then try running `docker compose up` again to start your containers
 * If the connection to the Infrastructure agent fails in the last step.
-<<<<<<< Updated upstream
   * Try running the Linux install command instead of the Docker command as shown below. <img width="962" alt="Connect your logs and infrastructure - Linux" src="readmeData/TroubleshootingPythonAgentInstallation.png">
-=======
-  * Try running the Linux install command instead of the Docker command as shown below. <img src="readmeData/troubleshooting_python_agent_installation_1.png" alt="image" width="60%" height="60%>
->>>>>>> Stashed changes
 </details>
 
 ### .NET Agent
