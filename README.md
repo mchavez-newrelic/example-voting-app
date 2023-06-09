@@ -149,10 +149,10 @@ docker stack deploy --compose-file docker-stack.yml vote
   newrelic.agent.record_custom_event('votes', params,application=newrelic.agent.application())
   ```
   <img src="readmeData/building_a_dashboard_1.png" alt="image" width="60%" height="60%">
+ 
   * Run your app and the custom events data should flow into New Relic One
 
-* In your New Relic One dashboard on the left, click on `Dashboards`, then on the top right, click on `Create a dashboard`
- <img src="readmeData/building_a_dashboard_2.png" alt="image" width="60%" height="60%">
+* In your New Relic One dashboard on the left, click on `Dashboards`, then on the top right, click on `Create a dashboard` <img src="readmeData/building_a_dashboard_2.png" alt="image" width="60%" height="60%">
  
 * Select `Create a new dashboard` and on the next page, enter a name before proceeding.
  <img width="406" alt="image" src="readmeData/building_a_dashboard_3.png"> <img width="404" alt="image" src="readmeData/building_a_dashboard_4.png">
@@ -160,11 +160,9 @@ docker stack deploy --compose-file docker-stack.yml vote
 * Click on any panel to `Add a new chart` and in the pop-up on the right, select `Add a chart`
  <img width="434" alt="image" src="readmeData/building_a_dashboard_5.png"> <img width="396" alt="image" src="readmeData/building_a_dashboard_6.png">
  
-* Enter the follow query `SELECT count(*) FROM votes FACET appName TIMESERIES SINCE 5 hours ago` and hit the `Run` button. You should be able to see a chart of the results being sent from the application. You can also customize how the chart looks, for example, we can change the "Chart Type"
- <img src="readmeData/building_a_dashboard_2.png" alt="image" width="60%" height="60%">
+* Enter the follow query `SELECT count(*) FROM votes FACET appName TIMESERIES SINCE 5 hours ago` and hit the `Run` button. You should be able to see a chart of the results being sent from the application. You can also customize how the chart looks, for example, we can change the "Chart Type" </br><img src="readmeData/building_a_dashboard_2.png" alt="image" width="60%" height="60%">
  
-* Changing the "Chart Type" to Stacked Bar will look like this: 
- <img src="readmeData/building_a_dashboard_2.png" alt="image" width="60%" height="60%">
+* Changing the "Chart Type" to Stacked Bar will look like this: <img src="readmeData/building_a_dashboard_2.png" alt="image" width="60%" height="60%">
 </details> 
 
 ## Run the app in Kubernetes
