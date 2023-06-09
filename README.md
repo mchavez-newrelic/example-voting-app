@@ -118,12 +118,12 @@ docker stack deploy --compose-file docker-stack.yml vote
 * Look for the `package.json` file in the `result` folder and add `"newrelic": "latest"` as part of the dependencies.<br/><img src="readmeData/nodeJS_agent_installation_3.png" alt="image" width="60%" height="60%">
 * In the `server.js` file, add this line to the top: `newrelic = require('newrelic');`<br/><img src="readmeData/nodeJS_agent_installation_4.png" alt="image" width="60%" height="60%">
 * Setting up your ENV variables
-  * For the Dockerfile in the `result` folder, we will need to add this ENV variable `ENV NEW_RELIC_NO_CONFIG_FILE=true`<br/><img src="readmeData/nodeJS_agent_installation_4.png" alt="image" width="60%" height="60%">
-  * Since we do not have a newrelic.js file, we will need to setup the ENV variables for our license key and app name. In the same dockerfile, add `ENV NEW_RELIC_APP_NAME=[Insert Different App Name]` and `ENV NEW_RELIC_LICENSE_KEY=[Insert Ingest License Key]`. Make sure to use a unique application name that doesn't exist in New Relic One.
+  * For the Dockerfile in the `result` folder, we will need to add this ENV variable `ENV NEW_RELIC_NO_CONFIG_FILE=true`
   * Optionally, you can also add other ENV variables like `ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true \` and `NEW_RELIC_LOG=stdout`. Please refer to [here](https://docs.newrelic.com/docs/apm/agents/nodejs-agent/installation-configuration/nodejs-agent-configuration).<br/><img src="readmeData/nodeJS_agent_installation_6.png" alt="image" width="60%" height="60%">
+  * Since we do not have a newrelic.js file, we will need to setup the ENV variables for our license key and app name. In the same dockerfile, add `ENV NEW_RELIC_APP_NAME=[Insert Different App Name]` and `ENV NEW_RELIC_LICENSE_KEY=[Insert Ingest License Key]`. Make sure to use a unique application name that doesn't exist in New Relic One. <br/><img src="readmeData/nodeJS_agent_installation_5.png" alt="image" width="60%" height="60%">
 * In your terminal, run this following command to build your Docker containers: `docker compose build --no-cache`
   * Afterwards, we can run the Docker images by executing `docker compose up`
-* Continue to the next step in New Relic One to test for a successful connection.<br/><img src="readmeData/nodeJS_agent_installation_6.png" alt="image" width="60%" height="60%">
+* Continue to the next step in New Relic One to test for a successful connection.<br/><img src="readmeData/nodeJS_agent_installation_7.png" alt="image" width="60%" height="60%">
 
 </details>
 
