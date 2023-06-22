@@ -81,7 +81,7 @@ docker stack deploy --compose-file docker-stack.yml vote
  
 * You can begin installing the .NET agent by first clicking the **Add Data** tab on the left hand navigation pane, as shown below. <img width="1490" alt="Add Data" src="readmeData/AgentInstallation_1.png">
 * Search for the .NET agent in the **Search for any technology** search bar and click the .NET agent under the **Application monitoring** section as shown below. <img width="824" alt="image" src="readmeData/NETAgentInstallation_2.png">
-* Next, give your application a name, preferably different from the name given to your Python Agent. For example, you can name the .NET application `example-voting-app-worker` in your New Relic account.
+
 * We will be following the steps linked [here](https://docs.newrelic.com/install/dotnet/?deployment=linux&docker=yesDocker) to install and enable the .NET agent inside our .NET Docker container.
   * Replace the code in your `/worker/Dockerfile` file for your .NET worker to be as shown [here](https://github.com/mchavez-newrelic/example-voting-app/blob/instrumented-version/worker/Dockerfile).
   * Make sure to replace `YOUR_LICENSE_KEY` and `YOUR_APP_NAME` with your New Relic license key and .NET application name respectively inside the `ENV` command at the bottom of the Dockerfile. If you would like to know where to find your license key, you can follow instructions [here](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/).
@@ -104,7 +104,7 @@ docker stack deploy --compose-file docker-stack.yml vote
   * To do this, we'll need to extract our call to the Redis server into its own function rather than being called directly in the `Main` function. 
   * Try poking around in the main function in `/worker/Program.cs` to see if you can find the call being made to Redis. Then, try extracting this call into its own function and decorating it with a `[Transaction]`. You should have a final result that looks like [this](https://github.com/mchavez-newrelic/example-voting-app/blob/cef8d9cffadc0761b585f0c65f87ea6fc887a037/worker/Program.cs#L156).
   * Let's restart our application and interact with the vote counter to make some calls to the Redis server. You should begin to see data in your New Relic account as shown below. <img width="1480" alt="Redis Transaction" src="readmeData/NETWorkerCustomInstrumentation_2.png">
-  * This is really cool as we're now adding custom instrumentation to track a couple important transactions that are being made in our .NET worker! Feel free to add more custom instrumentation as you'd like, and you can also reference documentation [here](https://docs.newrelic.com/docs/apm/agents/net-agent/custom-instrumentation/introduction-net-custom-instrumentation/) for doing so.
+  * This is really cool as we're now adding custom instrumentation to track a couple of important transactions that are being made in our .NET worker! Feel free to add more custom instrumentation as you'd like, and you can also reference documentation [here](https://docs.newrelic.com/docs/apm/agents/net-agent/custom-instrumentation/introduction-net-custom-instrumentation/) for doing so.
 
 </details>
 
@@ -116,11 +116,13 @@ docker stack deploy --compose-file docker-stack.yml vote
 * For Instrumentation Method, select `Docker`.<br/><img src="readmeData/nodeJS_agent_installation_2.png" alt="image" width="60%" height="60%">
 * Give your application a name and click Save.
 * Look for the `package.json` file in the `result` folder and add `"newrelic": "latest"` as part of the dependencies.<br/><img src="readmeData/nodeJS_agent_installation_3.png" alt="image" width="60%" height="60%">
-* In the `server.js` file, add this line to the top: `newrelic = require('newrelic');`<br/><img src="readmeData/nodeJS_agent_installation_4.png" alt="image" width="60%" height="60%">
+* In the `server.js` file, add this line to the top: `var newrelic = require('newrelic');`<br/><img src="readmeData/nodeJS_agent_installation_4.png" alt="image" width="60%" height="60%">
+* Change Directory in your Terminal to the results directory and run the following command `npm install newrelic --save`
+* Once install is complete, navigate back to the root directory of the application
 * Setting up your ENV variables
   * For the Dockerfile in the `result` folder, we will need to add this ENV variable `ENV NEW_RELIC_NO_CONFIG_FILE=true`
   * Optionally, you can also add other ENV variables like `ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true \` and `NEW_RELIC_LOG=stdout`. Please refer to [here](https://docs.newrelic.com/docs/apm/agents/nodejs-agent/installation-configuration/nodejs-agent-configuration).<br/><img src="readmeData/nodeJS_agent_installation_6.png" alt="image" width="60%" height="60%">
-  * Since we do not have a newrelic.js file, we will need to setup the ENV variables for our license key and app name. In the same dockerfile, add `ENV NEW_RELIC_APP_NAME=[Insert Different App Name]` and `ENV NEW_RELIC_LICENSE_KEY=[Insert Ingest License Key]`. Make sure to use a unique application name that doesn't exist in New Relic One. <br/><img src="readmeData/nodeJS_agent_installation_5.png" alt="image" width="60%" height="60%">
+  * Since we do not have a newrelic.js file, we will need to setup the ENV variables for our license key and app name. In the same dockerfile, add `ENV NEW_RELIC_APP_NAME=["Insert results services name"]` and `ENV NEW_RELIC_LICENSE_KEY=["Insert Ingest License Key"]`. Make sure to use a unique application name that doesn't exist in New Relic One. <br/><img src="readmeData/nodeJS_agent_installation_5.png" alt="image" width="60%" height="60%">
 * In your terminal, run this following command to build your Docker containers: `docker compose build --no-cache`
   * Afterwards, we can run the Docker images by executing `docker compose up`
 * Continue to the next step in New Relic One to test for a successful connection.<br/><img src="readmeData/nodeJS_agent_installation_7.png" alt="image" width="60%" height="60%">
