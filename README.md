@@ -103,7 +103,7 @@ docker stack deploy --compose-file docker-stack.yml vote
 * As of now, we've only added custom instrumentation for tracking the `UpdateVote` transaction. Let's try adding custom instrumentation for tracking our query to the Redis server!
   * To do this, we'll need to extract our call to the Redis server into its own function rather than being called directly in the `Main` function. 
   * Try poking around in the main function in `/worker/Program.cs` to see if you can find the call being made to Redis. Then, try extracting this call into its own function and decorating it with a `[Transaction]`. You should have a final result that looks like [this](https://github.com/mchavez-newrelic/example-voting-app/blob/cef8d9cffadc0761b585f0c65f87ea6fc887a037/worker/Program.cs#L156).
-  * Let's restart our application and interact with the vote counter to make some calls to the Redis server. You should begin to see data in your New Relic account as shown below. <img width="1480" alt="Redis Transaction" src="readmeData/NETWorkerCustomInstrumentation_2.png">
+  * Let's restart our application and interact with the vote counter to make some calls to the Redis server. You should begin to see data in your New Relic account as shown below. <img width="1480" alt="Redis Transaction" src="readmeData/NETWorkerCustomInstrumentation_3.png">
   * This is really cool as we're now adding custom instrumentation to track a couple of important transactions that are being made in our .NET worker! Feel free to add more custom instrumentation as you'd like, and you can also reference documentation [here](https://docs.newrelic.com/docs/apm/agents/net-agent/custom-instrumentation/introduction-net-custom-instrumentation/) for doing so.
 
 </details>
